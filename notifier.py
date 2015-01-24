@@ -40,7 +40,7 @@ def main():
 
     handler = EventHandler()
     notifier = pyinotify.Notifier(wm, handler)
-    path='/home/shai/caffe/examples/plankton/'
+    path='/home/ubuntu/mocha/examples/plankton/'
     dd = wm.add_watch(path, mask, rec=True,auto_add=True)
     notifier.loop()
 
