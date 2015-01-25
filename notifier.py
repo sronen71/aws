@@ -22,13 +22,10 @@ class EventHandler(pyinotify.ProcessEvent):
        k.set_contents_from_filename(pathname)
        k.set_acl('public-read')
 
-    def process_IN_CREATE(self, event):
-        print "Creating:", event.pathname
-        self._push_s3(event.pathname)
-
-    def process_IN_MODIFY(self,event):
-        print "Modify:",event.pathname
-        self._push_s3(event.pathname)
+    def process_IN_CLOSE_WRITE(self,event):
+            if os.path.isfile(event.pathname):
+                print "Pushing",event.pathname,"to S3"
+                self._push_s3(event.pathname)
 
 def main():
     
