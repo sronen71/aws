@@ -2,11 +2,13 @@
 
 import time
 import boto.ec2
+import os
+
 conn=boto.ec2.connect_to_region("us-west-1")
 instances=conn.get_only_instances(instance_ids=['i-f63a573c'])
 instance=instances[0]
 print "on demand instance:",instance,instance.state
-images=conn.get_all_images(owners='self',image_ids=['ami-40312805'])
+images=conn.get_all_images(owners='self',image_ids=['ami-3cdfc679'])
 image= images[0]
 
 print "selected image: ",image.id
@@ -38,8 +40,20 @@ instance = launched[0]
 print "spot launched: ",instance,instance.id,instance.state
 time.sleep(SPIN_WAIT_TIME)
 
+
+#keep on termination volume attached as /dev/sda1:
+instance.modify_attribute('blockDeviceMapping', { '/dev/sda1' : False }) 
+
 # delete on termination volume attached as /dev/sda1:
-#instance.modifyAttribute('blockDeviceMapping', { '/dev/sda1' : True }) 
+#instance.modify_attribute('blockDeviceMapping', { '/dev/sda1' : True }) 
+
+
+
+
+time.sleep(SPIN_WAIT_TIME)
+print "ip address:",instance.ip_address
+os.system("gnome-terminal -e 'bash -c \"ssh -X -i EC2Key2.pem ubuntu@"+instance.ip_address+"; exec bash\"'")
+
 #time.sleep(SPIN_WAIT_TIME) 
 #print "Terminating"
 #conn.terminate_instances(instance_ids=[instance.id])
