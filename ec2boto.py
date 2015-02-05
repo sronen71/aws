@@ -8,7 +8,7 @@ conn=boto.ec2.connect_to_region("us-west-1")
 instances=conn.get_only_instances(instance_ids=['i-f63a573c'])
 instance=instances[0]
 print "on demand instance:",instance,instance.state
-images=conn.get_all_images(owners='self',image_ids=['ami-3cdfc679'])
+images=conn.get_all_images(owners='self',image_ids=['ami-c4a0b981'])
 image= images[0]
 
 print "selected image: ",image.id
@@ -42,7 +42,7 @@ time.sleep(SPIN_WAIT_TIME)
 
 
 #keep on termination volume attached as /dev/sda1:
-instance.modify_attribute('blockDeviceMapping', { '/dev/sda1' : False }) 
+#instance.modify_attribute('blockDeviceMapping', { '/dev/sda1' : False }) 
 
 # delete on termination volume attached as /dev/sda1:
 #instance.modify_attribute('blockDeviceMapping', { '/dev/sda1' : True }) 
